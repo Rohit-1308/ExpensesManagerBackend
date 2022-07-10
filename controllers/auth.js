@@ -35,8 +35,13 @@ exports.login = async (req, res) => {
     }
     try {
         let result=await bcrypt.compare(password,user.password)
-        if(result) return res.status(201).json({success:true})
-        return res.status(400).json({success:false})
+        if(result){
+          sendToken(user,200,res)
+          // return res.status(201).json({success:true})
+        }else{
+          return res.status(400).json({success:false,token:null})
+
+        }
         
     } catch (error) {
         
@@ -46,8 +51,8 @@ exports.login = async (req, res) => {
     }
 };
 
-// const sendToken=(user,statuscode,res)=>{
-//     const token=user.getSignedToken();
+const sendToken=(user,statuscode,res)=>{
+    const token=user.getSignedToken();
 
-//     return res.status(statuscode).json({success:true,token})
-// }
+    return res.status(statuscode).json({success:true,token})
+}
