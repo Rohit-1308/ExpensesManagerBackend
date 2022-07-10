@@ -29,6 +29,8 @@ exports.login = async (req, res) => {
     const {email,password}=req.body
     let user=await User.findOne({email})
     if(!user){
+      console.log({email});
+      
        return res.status(404).json({success:false,message:"user does not exits"})
     }
     try {
