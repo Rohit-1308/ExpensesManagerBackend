@@ -29,12 +29,12 @@ exports.login = async (req, res) => {
     const {email,password}=req.body
     let user=await User.findOne({email})
     if(!user){
-       return res.status(404).json({success:false,message:"user does not exits"})
+       return res.status(500).json({success:false,message:"user does not exits"})
     }
     try {
         let result=await bcrypt.compare(password,user.password)
         if(result) return res.status(200).json({success:true})
-         return res.status(400).json({success:false})
+        return res.status(400).json({success:false})
         
     } catch (error) {
         
