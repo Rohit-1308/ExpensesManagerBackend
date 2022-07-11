@@ -22,7 +22,7 @@ UserSchema.pre('save',async function(next){
     this.password=await bcrypt.hash(this.password,salt)
 })
 
-UserSchema.methods.getSignedToken=function(user){
+UserSchema.methods.getSignedToken=function(user){    
     return jwt.sign(this.id,process.env.JWT_TOKEN)
 }
 const User=mongoose.model('User',UserSchema)
