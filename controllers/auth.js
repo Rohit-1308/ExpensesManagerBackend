@@ -1,5 +1,5 @@
 const User = require("../models/UserSchema");
-const bcrypt=require('bcrypt')
+const bcrypt = require("bcrypt");
 
 exports.register = async (req, res) => {
   const { name, email, password, confirmPassword } = req.body;
@@ -7,7 +7,7 @@ exports.register = async (req, res) => {
   let user = await User.findOne({ email });
 
   if (user) {
-    res.status(400).json({ error: "user already exits" });
+    return res.status(400).json({ error: "user already exits" });
   }
   try {
     user = User.create({
@@ -19,40 +19,40 @@ exports.register = async (req, res) => {
 
     return res.status(200).json({ success: true });
   } catch (error) {
-    res
+    return res
       .status(500)
       .json({ error: error.message, log: "Unable to create user" });
-    console.log({ error: error.message, log: "Unable to create user" });
   }
 };
+
+
 exports.login = async (req, res) => {
-    const {email,password}=req.body
-    let user=await User.findOne({email})
-    if(!user){
-      console.log({email});
-      
-       return res.status(404).json({success:false,message:"user does not exits"})
-    }
-    try {
-        let result=await bcrypt.compare(password,user.password)
-        if(result){
-          sendToken(user,200,res)
-          // return res.status(201).json({success:true})
-        }else{
-          return res.status(400).json({success:false,token:null})
+  const { email, password } = req.body;
+  let user = await User.findOne({ email });
+  if (!user) {
+    console.log({ email });
 
-        }
-        
-    } catch (error) {
-        
-      return res.status(500)
+    return res
+      .status(404)
+      .json({ success: false, message: "user does not exits" });
+  }
+  try {
+    let result = await bcrypt.compare(password, user.password);
+    if (result) {
+      sendToken(user, 200, res);
+      // return res.status(201).json({success:true})
+    } else {
+      return res.status(400).json({ success: false, token: null });
+    }
+  } catch (error) {
+    return res
+      .status(500)
       .json({ error: error.message, log: "Internal server error" });
-
-    }
+  }
 };
 
-const sendToken=(user,statuscode,res)=>{
-    const token=user.getSignedToken();
+const sendToken = (user, statuscode, res) => {
+  const token = user.getSignedToken();
 
-    return res.status(statuscode).json({success:true,token})
-}
+  return res.status(statuscode).json({ success: true, token });
+};
