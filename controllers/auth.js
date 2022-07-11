@@ -2,7 +2,7 @@ const User = require("../models/UserSchema");
 const bcrypt = require("bcrypt");
 
 exports.register = async (req, res) => {
-  const { name, email, password, confirmPassword } = req.body;
+  const { name, email, password } = req.body;
 
   let user = await User.findOne({ email });
 
@@ -15,9 +15,8 @@ exports.register = async (req, res) => {
       email,
       password,
     });
-    console.log("k");
-
-    return res.status(200).json({ success: true });
+    sendToken(user, 200, res);
+    // return res.status(200).json({ success: true });
   } catch (error) {
     return res
       .status(500)
