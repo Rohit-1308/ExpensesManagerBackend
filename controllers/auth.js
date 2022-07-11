@@ -12,19 +12,16 @@ exports.register = async (req, res) => {
   }
   try {
     user = await User.create({
-     
       email,
       password,
     });
     // sendToken(user, 200, res);//note this returns user.getsignedtoken is not a function in reponse of this request
-    
-    
     const token=await jwt.sign({id:user._id},process.env.Jwt_token)//ask this to ritesh that why to i have to give json as parameter and not "user._id" as directly
     
     return res.status(200).json({ success: true,token});
   } catch (error) {
     return res
-      .status(500)
+      .status(404)
       .json({ error: error.message, log: "Unable to create user" });
   }
 };
