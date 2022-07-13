@@ -16,6 +16,7 @@ const UserSchema=new Schema({
         type:String,
         required:true
     }
+    ,otp:{type:Number}
 })
 UserSchema.pre('save',async function(next){
     const salt=await bcrypt.genSalt(10)
