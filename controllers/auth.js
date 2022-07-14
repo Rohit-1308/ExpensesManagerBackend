@@ -25,9 +25,11 @@ exports.sendOtp=async (req,res)=>{
 
 
 exports.register = async (req, res) => {
-  const { email, password,otp,hashedOtp } = req.body;
+  const { email, password,otp,hashedotp } = req.body;
 
-  const  isVerified=await bcrypt.compare(otp,hashedOtp)
+  const  isVerified=await bcrypt.compare(otp,hashedotp)
+  console.log(isVerified);
+  
 
   if(!isVerified) return res.status(404).json({ error: "Enter Correct Otp" });
 
