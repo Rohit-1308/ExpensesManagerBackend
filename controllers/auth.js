@@ -17,7 +17,7 @@ exports.sendOtp=async (req,res)=>{
     
 
 
-    return res.status(200).json({success:true,otp:otp,hashedotp:hashedOtp})
+    return res.status(200).json({success:true,hashedotp:hashedOtp})
   } catch (error) {
     return res.status(401).json({success:false,log:"Unable to send otp"})
   }
@@ -26,6 +26,7 @@ exports.sendOtp=async (req,res)=>{
 
 exports.register = async (req, res) => {
   const { email, password,otp,hashedotp } = req.body;
+  console.log(req.body);
 
   const  isVerified=await bcrypt.compare(otp,hashedotp)
   console.log(isVerified);
