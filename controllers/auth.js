@@ -31,7 +31,7 @@ exports.register = async (req, res) => {
   console.log(isVerified);
   
 
-  if(!isVerified) return res.status(404).json({ error: "Enter Correct Otp" });
+  if(!isVerified) return res.status(404).json({ error: "Enter Correct Otp" ,hashedotp});
 
   let user = await User.findOne({ email });
 
@@ -52,7 +52,7 @@ exports.register = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ error: error.message, log: "Unable to create user" });
+      .json({ error: error.message, log: "Unable to create user",hashedotp });
   }
 };
 
