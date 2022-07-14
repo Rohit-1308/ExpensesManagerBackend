@@ -9,15 +9,15 @@ require('dotenv').config();
 exports.sendOtp=async (req,res)=>{
   const {email}=req.body
   try {
-    let otp = await  Math.floor((Math.random() * 10000) + 1);
+    let otp = await  Math.floor((Math.random() * 10000) + 1).toString()
     const mailservice=new MailServices()
     const salt=await bcrypt.genSalt(10)
     mailservice.sendMail(email,otp)
-    const hashedOtp=await bcrypt.hash(otp.toString(),salt)
+    const hashedOtp=await bcrypt.hash(otp,salt)
     
 
 
-    return res.status(200).json({success:true,hashedotp:hashedOtp})
+    return res.status(200).json({success:true,otp:otp,hashedotp:hashedOtp})
   } catch (error) {
     return res.status(401).json({success:false,log:"Unable to send otp"})
   }
@@ -27,14 +27,15 @@ exports.sendOtp=async (req,res)=>{
 exports.register = async (req, res) => {
   const { email, password,otp,hashedOtp } = req.body;
 
-  const  isVerified=await bcrypt.compare(otp.toString(),hashedOtp)
+  const  isVerified=await bcrypt.compare(otp,hashedOtp)
+
+  if(!isVerified) return res.status(404).json({ error: "Enter Correct Otp" });
 
   let user = await User.findOne({ email });
 
   if (user) {
     return res.status(404).json({ error: "user already exits" });
   }
-  if(!isVerified) return res.status(404).json({ error: "Enter Correct Otp" });
   try {
     user = await User.create({
       email,
