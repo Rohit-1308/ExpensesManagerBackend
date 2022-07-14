@@ -9,13 +9,13 @@ require('dotenv').config();
 exports.sendOtp=async (req,res)=>{
   const {email}=req.body
   try {
-    let otp = await  Math.floor((Math.random() * 10000) + 1).toString()
+    let otp = await  Math.floor((Math.random() * 10000) + 1)
     const mailservice=new MailServices()
-    const salt=await bcrypt.genSalt(10)
+    // const salt=await bcrypt.genSalt(10)
     mailservice.sendMail(email,otp)
-    const hashedOtp=await bcrypt.hash(otp,salt)
-    
 
+    const hashedOtp=await bcrypt.hash(`${otp}.${email}`,10)
+    
 
     return res.status(200).json({success:true,hashedotp:hashedOtp})
   } catch (error) {
@@ -26,10 +26,12 @@ exports.sendOtp=async (req,res)=>{
 
 exports.register = async (req, res) => {
   const { email, password,otp,hashedotp } = req.body;
-  console.log(req.body);
 
-  const  isVerified=await bcrypt.compare(otp,hashedotp)
-  console.log(isVerified);
+  const genhashedOtp=await bcrypt.hash(`${otp}.${email}`,10)
+ 
+  
+  
+  const  isVerified=await bcrypt.compare(`${otp}.${email}`,hashedotp)
   
 
   if(!isVerified) return res.status(404).json({ error: "Enter Correct Otp" ,hashedotp});
