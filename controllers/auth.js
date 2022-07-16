@@ -15,7 +15,7 @@ exports.sendOtp=async (req,res)=>{
     mailservice.sendMail(email,otp)
 
     const hashedOtp=await bcrypt.hash(`${otp}.${email}`,10)
-    
+
 
     return res.status(200).json({success:true,hashedotp:hashedOtp})
   } catch (error) {
@@ -34,7 +34,7 @@ exports.register = async (req, res) => {
   const  isVerified=await bcrypt.compare(`${otp}.${email}`,hashedotp)
   
 
-  if(!isVerified) return res.status(404).json({ error: "Enter Correct Otp" ,hashedotp});
+  if(!isVerified) return res.status(400).json({ error: "Enter Correct Otp" ,hashedotp});
 
   let user = await User.findOne({ email });
 
@@ -73,7 +73,6 @@ exports.login = async (req, res) => {
   try {
     let result = await bcrypt.compare(password, user.password);
     if (result) {
-      console.log({userId:user._id});
       // this.sendMail(email)
       sendToken(user, 200, res);
       // return res.status(201).json({success:true})
