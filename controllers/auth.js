@@ -27,19 +27,15 @@ exports.sendOtp=async (req,res)=>{
 exports.register = async (req, res) => {
   const { email, password,otp,hashedotp } = req.body;
 
-  const genhashedOtp=await bcrypt.hash(`${otp}.${email}`,10)
- 
-  
-  
+   
   const  isVerified=await bcrypt.compare(`${otp}.${email}`,hashedotp)
   
-
-  if(!isVerified) return res.status(400).json({ error: "Enter Correct Otp" ,hashedotp});
+  if(!isVerified) return res.status(404).json({ error: "Enter Correct Otp" ,hashedotp});
 
   let user = await User.findOne({ email });
 
   if (user) {
-    return res.status(404).json({ error: "user already exits" });
+    return res.status(401).json({ error: "user already exits" });
   }
   try {
     user = await User.create({
