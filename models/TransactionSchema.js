@@ -23,10 +23,8 @@ const TransactionSchema= new Schema({
     },
     month:{
         type:String
-    
-    }
-    
-})
+    }  
+},{timestamps:true})
 
 
 const Transaction=moongoose.model('Transaction',TransactionSchema)

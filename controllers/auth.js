@@ -41,12 +41,8 @@ exports.register = async (req, res) => {
       email,
       password,
     });
-    // sendToken(user, 200, res);//note this returns user.getsignedtoken is not a function in reponse of this request
-   
 
-    const token=await jwt.sign({id:user._id},process.env.JWT_TOKEN)//ask this to ritesh that why to i have to give json as parameter and not "user._id" as directly
-    
-    return res.status(200).json({ success: true,token});
+    return sendToken(user, 200, res);       
   } catch (error) {
     return res
       .status(500)
@@ -80,7 +76,6 @@ exports.login = async (req, res) => {
 };
 
 const sendToken = (user, statuscode, res) => {
-  console.log('flow at before user.getsignedtokenm');
   
   const token = user.getSignedToken();
   console.log({token});

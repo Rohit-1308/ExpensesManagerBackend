@@ -26,5 +26,6 @@ UserSchema.pre('save',async function(next){
 UserSchema.methods.getSignedToken=function(user){    
     return jwt.sign(this.id,process.env.JWT_TOKEN)
 }
+
 const User=mongoose.model('User',UserSchema)
 module.exports=User
