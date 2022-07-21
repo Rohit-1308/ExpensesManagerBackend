@@ -26,7 +26,6 @@ exports.sendOtp=async (req,res)=>{
 
 exports.register = async (req, res) => {
   const { email, password,otp,hashedotp } = req.body;
-
    
   const  isVerified=await bcrypt.compare(`${otp}.${email}`,hashedotp)
   
@@ -60,8 +59,6 @@ exports.login = async (req, res) => {
   const { email, password } = req.body;
   let user = await User.findOne({ email });
   if (!user) {
-    console.log({ email });
-
     return res
       .status(404)
       .json({ success: false, message: "user does not exits" });

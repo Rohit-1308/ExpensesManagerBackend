@@ -17,6 +17,8 @@ app.get("/",(req,res)=>{ res.send("This is rk")})
 
 app.use("/api/auth",require('./routes/auth'))
 
+app.use("/api/expense",require('./routes/expense'))
+
 app.listen(process.env.PORT || 3000,()=>{
     console.log(`server listening at http://localhost:3000`)
 })
